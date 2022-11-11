@@ -1,0 +1,17 @@
+@import "vars";
+@import "mixins";
+
+.result {
+  .list {
+    display: flex;
+    width: 1200px;
+    margin: 100px auto;
+    flex-wrap: wrap;
+    li {
+      flex-basis: 5%;
+      img {
+        width: 100%;
+      }
+    }
+  }
+}

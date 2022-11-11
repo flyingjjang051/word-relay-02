@@ -1,0 +1,12 @@
+.result .list {
+  display: flex;
+  width: 1200px;
+  margin: 100px auto;
+  flex-wrap: wrap;
+}
+.result .list li {
+  flex-basis: 5%;
+}
+.result .list li img {
+  width: 100%;
+}
