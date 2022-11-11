@@ -39,15 +39,15 @@
       $(".search .txt").on("keyup", function (e) {
         if (e.keyCode === 13) {
           const searchTxt = $(".search .txt").val();
-          search(searchTxt);
+          movieSearch(searchTxt);
         }
       });
       $(".search button").on("click", function (e) {
         const searchTxt = $(".search .txt").val();
-        search(searchTxt);
+        movieSearch(searchTxt);
       });
 
-      function search(searchTxt) {
+      function imgSearch(searchTxt) {
         $.ajax({
           url: "http://dapi.kakao.com/v2/search/image",
           headers: {
@@ -65,6 +65,34 @@
             for (let i = 0; i < 80; i++) {
               //listHtml += `<li style="opacity:0; transform:scale(0)"><img src="${documents[i].thumbnail_url}"></li>`;
               listHtml += `<li><a href="${documents[i].image_url}" data-fancybox="gallery" data-caption="${documents[i].display_sitename}"><img src="${documents[i].thumbnail_url}"></a></li>`;
+            }
+            $(".result .list").html(listHtml);
+            //gsap.to(".result .list li", { opacity: 1, scale: 1, stagger: { each: 0.005 } });
+            gsap.from(".result .list li", { opacity: 0, scale: 0, stagger: { each: 0.005 } });
+          })
+          .fail(function (error) {
+            console.log(error);
+          });
+      }
+      function movieSearch(searchTxt) {
+        $.ajax({
+          url: "http://dapi.kakao.com/v2/search/vclip",
+          headers: {
+            Authorization: "KakaoAK d3a4eac6c386772340213a4ca344fc58",
+          },
+          data: {
+            query: searchTxt,
+            size: 30,
+          },
+        })
+          .done(function (response) {
+            console.log(response);
+            const documents = response.documents;
+            //$(".result ul").html(`<li><img src="${documents[0].thumbnail_url}"></li>`);
+            let listHtml = "";
+            for (let i = 0; i < 30; i++) {
+              //listHtml += `<li style="opacity:0; transform:scale(0)"><img src="${documents[i].thumbnail_url}"></li>`;
+              listHtml += `<li><a href="${documents[i].url}" data-fancybox="gallery" data-caption="${documents[i].title}"><img src="${documents[i].thumbnail}"></a></li>`;
             }
             $(".result .list").html(listHtml);
             //gsap.to(".result .list li", { opacity: 1, scale: 1, stagger: { each: 0.005 } });
