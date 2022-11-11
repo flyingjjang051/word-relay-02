@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet" />
     <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/fancybox.css" />
     <link rel="stylesheet" href="css/layout.css" />
     <link rel="stylesheet" href="css/kakao.css" />
     <script src="https://kit.fontawesome.com/08ebc00fc6.js" crossorigin="anonymous"></script>
@@ -18,40 +19,61 @@
     <script src="js/splitting.min.js"></script>
     <script src="js/aos.js"></script>
     <script src="js/hangul-tools.js"></script>
+    <script src="js/fancybox.umd.js"></script>
     <script src="js/jquery-3.6.1.min.js"></script>
   </head>
   <body>
     <header id="header">
       <h1>kakao <strong>image search</strong></h1>
     </header>
+    <div class="search">
+      <input type="text" class="txt" placeholder="검색할 이미지를 입력하세요." /> <button><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
     <div class="result">
       <ul class="list">
         <!-- <li></li> -->
       </ul>
     </div>
     <script>
-      $.ajax({
-        url: "http://dapi.kakao.com/v2/search/image",
-        headers: {
-          Authorization: "KakaoAK d3a4eac6c386772340213a4ca344fc58",
-        },
-        data: {
-          query: "전지현",
-        },
-      })
-        .done(function (response) {
-          console.log(response);
-          const documents = response.documents;
-          //$(".result ul").html(`<li><img src="${documents[0].thumbnail_url}"></li>`);
-          let listHtml = "";
-          for (let i = 0; i < 80; i++) {
-            listHtml += `<li><img src="${documents[i].thumbnail_url}"></li>`;
-          }
-          $(".result .list").html(listHtml);
+      //search("설현");
+      $(".search .txt").on("keyup", function (e) {
+        if (e.keyCode === 13) {
+          const searchTxt = $(".search .txt").val();
+          search(searchTxt);
+        }
+      });
+      $(".search button").on("click", function (e) {
+        const searchTxt = $(".search .txt").val();
+        search(searchTxt);
+      });
+
+      function search(searchTxt) {
+        $.ajax({
+          url: "http://dapi.kakao.com/v2/search/image",
+          headers: {
+            Authorization: "KakaoAK d3a4eac6c386772340213a4ca344fc58",
+          },
+          data: {
+            query: searchTxt,
+          },
         })
-        .fail(function (error) {
-          console.log(error);
-        });
+          .done(function (response) {
+            console.log(response);
+            const documents = response.documents;
+            //$(".result ul").html(`<li><img src="${documents[0].thumbnail_url}"></li>`);
+            let listHtml = "";
+            for (let i = 0; i < 80; i++) {
+              //listHtml += `<li style="opacity:0; transform:scale(0)"><img src="${documents[i].thumbnail_url}"></li>`;
+              listHtml += `<li><a href="${documents[i].image_url}" data-fancybox="gallery" data-caption="${documents[i].display_sitename}"><img src="${documents[i].thumbnail_url}"></a></li>`;
+            }
+            $(".result .list").html(listHtml);
+            //gsap.to(".result .list li", { opacity: 1, scale: 1, stagger: { each: 0.005 } });
+            gsap.from(".result .list li", { opacity: 0, scale: 0, stagger: { each: 0.005 } });
+          })
+          .fail(function (error) {
+            console.log(error);
+          });
+      }
     </script>
   </body>
 </html>
