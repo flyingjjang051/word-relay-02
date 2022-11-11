@@ -22,46 +22,42 @@
   </head>
   <body>
     <header id="header">
-      <h1>word <strong>relay</strong></h1>
+      <h1>number <strong>count</strong></h1>
     </header>
-    <ul id="word-list">
-      <li>기러기</li>
-    </ul>
-    <div id="input">
-      <input type="text" id="word" />
+    <div>
+      <span class="num" style="font-size: 100px; color: #fff">0</span>
+      <span class="num02" style="font-size: 100px; color: #fff">0</span>
+      <span class="num03" style="font-size: 100px; color: #fff">0</span>
     </div>
     <script>
-      console.log(HanTools.dueum("님"));
-      console.log(HanTools.dueum("림"));
-      console.log(HanTools.dueum("김"));
-      console.log(HanTools.dueum("람"));
-      console.log(HanTools.dueum("남"));
-      const num = 10;
-      let txt = "기술사";
-      const wordArray = [txt];
-
-      $("#word-list li").text(txt);
-      $("#word").on("keyup", function (e) {
-        if (e.keyCode === 13) {
-          const word = $("#word");
-          const inputValue = word.val();
-          const firstChar = inputValue.charAt(0);
-          const dueumLastChar = HanTools.dueum(txt.charAt(2));
-          const lastChar = txt.charAt(2);
-          console.log("🚀 ~ file: word-relay.html ~ line 50 ~ lastChar", lastChar);
-          if ((firstChar === lastChar || firstChar === dueumLastChar) && !wordArray.includes(inputValue)) {
-            console.log("딩동댕");
-            txt = inputValue;
-            //$("#word-list li").text(txt);
-            $("#word-list").append(`<li>${txt}</li>`);
-            wordArray.push(txt);
-          } else {
-            gsap.from("#word", { x: 100, ease: "elastic" });
-          }
-          word.val("");
-          word.focus();
-        }
+      console.log(Math.ceil(0.2));
+      console.log(Math.floor(0.9));
+      console.log(Math.round(0.5));
+      const mySkill = {
+        html: 90,
+        myCss: 85,
+        js: 72,
+      };
+      gsap.from(mySkill, {
+        html: 0,
+        myCss: 0,
+        js: 0,
+        duration: 5,
+        onComplete: function () {
+          //clearInterval(clear);
+        },
+        onUpdate: function () {
+          $(".num").text(Math.round(mySkill.html));
+          $(".num02").text(Math.round(mySkill.myCss));
+          $(".num03").text(Math.round(mySkill.js));
+        },
       });
+      // let clear = setInterval(function () {
+      //   console.log(mySkill.html);
+      //   $(".num").text(mySkill.html);
+      //   $(".num02").text(mySkill.css);
+      //   $(".num03").text(mySkill.js);
+      // }, 100);
     </script>
   </body>
 </html>
