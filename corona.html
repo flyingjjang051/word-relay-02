@@ -60,9 +60,13 @@
           $.each(list, function (idx, item) {
             cities.push($(item).find("gubun").text());
             incDecList.push($(item).find("incDec").text());
-            bgColorList.push("rgba(255, 99, 132, 0.2)");
-            borderColorList.push("rgba(255, 99, 132, 1)");
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            bgColorList.push(`rgba(${r}, ${g}, ${b}, 0.2)`);
+            borderColorList.push(`rgba(${r}, ${g}, ${b}, 1)`);
           });
+          //0~1  === 0.000183,0.14839482,0.7849389243,0.3484938824
           const myChart = new Chart(ctx, {
             type: "bar",
             data: {
