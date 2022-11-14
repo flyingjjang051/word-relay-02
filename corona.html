@@ -42,6 +42,27 @@
       <canvas id="coronaChart"></canvas>
     </div>
     <script>
+      const temp = [1, 3, 2, 5, 7, 9, 11, 22, 100, 200, 300, 38, 40];
+      const txtTemp = ["가", "나", "다", "라", "마", "바", "사", "간", "단", "만"];
+      const txtObjTemp = [
+        { name: "가", price: 500 },
+        { anme: "나", price: 100 },
+        { name: "다", price: 1200 },
+        { name: "라", price: 900 },
+        { name: "마", price: 8000 },
+        { name: "바", price: 30 },
+        { name: "사", price: 1500 },
+        { name: "간", price: 400 },
+        { name: "단", price: 1110 },
+        { name: "만", price: 1200 },
+      ];
+      txtObjTemp.sort(function (a, b) {
+        if (a.price > b.price) return 1;
+        else if (a.price < b.price) return -1;
+        else if (a.price === b.price) return 0;
+      });
+      console.log(txtObjTemp);
+
       // $.ajax({
       //   url: "http://apis.data.go.kr/1352000/ODMS_COVID_04/callCovid04Api?serviceKey=Wnus4QpirWGI56CfvzMWDIDHMRL%2FmEF%2FqTl9gwVNbRggLYTGPFIdwBy0L51B%2B27d5QRbLanNmIAxPwNvl7dKPA%3D%3D&api_type=json&std_day=2022-11-13",
       // })
@@ -78,17 +99,31 @@
         })
           .done(function (response) {
             const list = $(response).find("item");
+            console.log($(list[0]).find("gubun").text());
             if (list.length <= 0) {
               $(".loading").addClass("off");
               $(".error").addClass("on");
 
               return;
             }
+            list.sort(function (a, b) {
+              const tempA = $(a).find("gubun").text();
+              const tempB = $(b).find("gubun").text();
+
+              //const tempA = parseInt($(a).find("incDec").text());
+              //const tempB = parseInt($(b).find("incDec").text());
+
+              if (tempA > tempB) return 1;
+              else if (tempA < tempB) return -1;
+              else if (tempA === tempB) return 0;
+            });
             console.log(list.length);
             // for (let i = 0; i < list.length; i++) {
             //   console.log($(list[i]).find("gubun").text());
             // }
             // iterable
+
+            console.log(list);
             $.each(list, function (idx, item) {
               cities.push($(item).find("gubun").text());
               incDecList.push($(item).find("incDec").text());
