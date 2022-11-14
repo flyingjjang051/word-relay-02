@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="css/reset.css" />
     <link rel="stylesheet" href="css/fancybox.css" />
     <link rel="stylesheet" href="css/layout.css" />
-    <link rel="stylesheet" href="css/kakao.css" />
+    <link rel="stylesheet" href="css/corona.css" />
     <script src="https://kit.fontawesome.com/08ebc00fc6.js" crossorigin="anonymous"></script>
     <script src="js/gsap/gsap.min.js"></script>
     <script src="js/gsap/ScrollToPlugin.min.js"></script>
@@ -21,6 +21,7 @@
     <script src="js/hangul-tools.js"></script>
     <script src="js/fancybox.umd.js"></script>
     <script src="js/jquery-3.6.1.min.js"></script>
+    <script src="js/chart.min.js"></script>
   </head>
   <body>
     <header id="header">
@@ -28,15 +29,16 @@
     </header>
     <div class="search"></div>
     <div class="result">
-      <ul class="list">
-        <!-- <li></li> -->
-      </ul>
+      <canvas id="coronaChart"></canvas>
     </div>
     <script>
       // $.ajax({
       //   url: "http://apis.data.go.kr/1352000/ODMS_COVID_04/callCovid04Api?serviceKey=Wnus4QpirWGI56CfvzMWDIDHMRL%2FmEF%2FqTl9gwVNbRggLYTGPFIdwBy0L51B%2B27d5QRbLanNmIAxPwNvl7dKPA%3D%3D&api_type=json&std_day=2022-11-13",
       // })
-
+      const cities = [];
+      const incDecList = [];
+      const bgColorList = [];
+      const borderColorList = [];
       $.ajax({
         url: "http://apis.data.go.kr/1352000/ODMS_COVID_04/callCovid04Api",
         data: {
@@ -56,16 +58,43 @@
           // }
           // iterable
           $.each(list, function (idx, item) {
-            //console.log(idx);
-            //console.log($(item).find("gubun").text());
-            //console.log($(item).find("incDec").text());
-            const incDec = $(item).find("incDec").text();
+            cities.push($(item).find("gubun").text());
+            incDecList.push($(item).find("incDec").text());
+            bgColorList.push("rgba(255, 99, 132, 0.2)");
+            borderColorList.push("rgba(255, 99, 132, 1)");
+          });
+          const myChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+              labels: cities,
+              datasets: [
+                {
+                  label: "# of Votes",
+                  data: incDecList,
+                  backgroundColor: bgColorList,
+                  borderColor: borderColorList,
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true,
+                },
+              },
+            },
           });
         })
         .fail(function (error) {
           console.log(error);
         });
       console.log("end");
+
+      const ctx = document.querySelector("#coronaChart").getContext("2d");
+      //const ctx = $("#coronaChart").get(0).getContext("2d");
+      //console.log(document.querySelector("#coronaChart"));
+      //console.log($("#coronaChart").get(0) === document.querySelector("#coronaChart"));
     </script>
   </body>
 </html>
