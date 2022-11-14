@@ -35,6 +35,10 @@
     </div>
     <div class="result">
       <div class="loading">corona data receiving</div>
+      <div class="error">
+        알 수 없는 오류로 코로나 데이터를 불러오지 못했습니다. <br />
+        다시 한번 날짜를 선책해주세요.
+      </div>
       <canvas id="coronaChart"></canvas>
     </div>
     <script>
@@ -42,67 +46,90 @@
       //   url: "http://apis.data.go.kr/1352000/ODMS_COVID_04/callCovid04Api?serviceKey=Wnus4QpirWGI56CfvzMWDIDHMRL%2FmEF%2FqTl9gwVNbRggLYTGPFIdwBy0L51B%2B27d5QRbLanNmIAxPwNvl7dKPA%3D%3D&api_type=json&std_day=2022-11-13",
       // })
 
-      const picker = new Lightpick({ field: document.querySelector("#date") });
-
-      const cities = [];
-      const incDecList = [];
-      const bgColorList = [];
-      const borderColorList = [];
-      $.ajax({
-        url: "http://apis.data.go.kr/1352000/ODMS_COVID_04/callCovid04Api",
-        data: {
-          serviceKey: "Wnus4QpirWGI56CfvzMWDIDHMRL/mEF/qTl9gwVNbRggLYTGPFIdwBy0L51B+27d5QRbLanNmIAxPwNvl7dKPA==",
-          api_type: "xml",
-          std_day: "2022-11-13",
+      const picker = new Lightpick({
+        field: document.querySelector("#date"),
+        format: "YYYY-MM-DD",
+        onSelect: function (date) {
+          $("#date").text(date.format("YYYY-MM-DD"));
+          loadCorona(date.format("YYYY-MM-DD"));
         },
-        dataType: "xml",
-      })
-        .done(function (response) {
-          const list = $(response).find("item");
-          console.log($(list[0]).find("gubun").text());
-          console.log($(list[1]).find("gubun").text());
-          console.log(list.length);
-          // for (let i = 0; i < list.length; i++) {
-          //   console.log($(list[i]).find("gubun").text());
-          // }
-          // iterable
-          $.each(list, function (idx, item) {
-            cities.push($(item).find("gubun").text());
-            incDecList.push($(item).find("incDec").text());
-            const r = Math.floor(Math.random() * 256);
-            const g = Math.floor(Math.random() * 256);
-            const b = Math.floor(Math.random() * 256);
-            bgColorList.push(`rgba(${r}, ${g}, ${b}, 0.2)`);
-            borderColorList.push(`rgba(${r}, ${g}, ${b}, 1)`);
-          });
-          //0~1  === 0.000183,0.14839482,0.7849389243,0.3484938824
-          const myChart = new Chart(ctx, {
-            type: "bar",
-            data: {
-              labels: cities,
-              datasets: [
-                {
-                  label: "# of Votes",
-                  data: incDecList,
-                  backgroundColor: bgColorList,
-                  borderColor: borderColorList,
-                  borderWidth: 1,
-                },
-              ],
-            },
-            options: {
-              scales: {
-                y: {
-                  beginAtZero: true,
+      });
+
+      let myChart = null;
+      function loadCorona(date) {
+        const cities = [];
+        const incDecList = [];
+        const bgColorList = [];
+        const borderColorList = [];
+        if (myChart !== null) {
+          myChart.destroy();
+          myChart = null;
+        }
+        $(".loading").removeClass("off");
+        $(".error").removeClass("on");
+        $.ajax({
+          url: "http://apis.data.go.kr/1352000/ODMS_COVID_04/callCovid04Api",
+          data: {
+            serviceKey: "Wnus4QpirWGI56CfvzMWDIDHMRL/mEF/qTl9gwVNbRggLYTGPFIdwBy0L51B+27d5QRbLanNmIAxPwNvl7dKPA==",
+            api_type: "xml",
+            std_day: date,
+          },
+          dataType: "xml",
+        })
+          .done(function (response) {
+            const list = $(response).find("item");
+            if (list.length <= 0) {
+              $(".loading").addClass("off");
+              $(".error").addClass("on");
+
+              return;
+            }
+            console.log(list.length);
+            // for (let i = 0; i < list.length; i++) {
+            //   console.log($(list[i]).find("gubun").text());
+            // }
+            // iterable
+            $.each(list, function (idx, item) {
+              cities.push($(item).find("gubun").text());
+              incDecList.push($(item).find("incDec").text());
+              const r = Math.floor(Math.random() * 256);
+              const g = Math.floor(Math.random() * 256);
+              const b = Math.floor(Math.random() * 256);
+              bgColorList.push(`rgba(${r}, ${g}, ${b}, 0.2)`);
+              borderColorList.push(`rgba(${r}, ${g}, ${b}, 1)`);
+            });
+            //0~1  === 0.000183,0.14839482,0.7849389243,0.3484938824
+
+            myChart = new Chart(ctx, {
+              type: "bar",
+              data: {
+                labels: cities,
+                datasets: [
+                  {
+                    label: "",
+                    data: incDecList,
+                    backgroundColor: bgColorList,
+                    borderColor: borderColorList,
+                    borderWidth: 1,
+                  },
+                ],
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  },
                 },
               },
-            },
+            });
+            $(".loading").addClass("off");
+          })
+          .fail(function (error) {
+            console.log(error);
           });
-          $(".loading").addClass("off");
-        })
-        .fail(function (error) {
-          console.log(error);
-        });
+      }
+      loadCorona("2022-11-13");
+
       console.log("end");
 
       const ctx = document.querySelector("#coronaChart").getContext("2d");
