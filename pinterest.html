@@ -33,6 +33,13 @@
       <h1>portfolio <strong>gallery</strong></h1>
     </header>
 
+    <div class="coordinate">
+      <label><span>screen</span><input type="text" id="screen" /></label>
+      <label><span>offset</span><input type="text" id="offset" /></label>
+      <label><span>page</span><input type="text" id="page" /></label>
+      <label><span>client</span><input type="text" id="client" /></label>
+    </div>
+
     <div class="category">
       <ul>
         <li class="on" data-filter="item">all</li>
@@ -56,6 +63,10 @@
         </li> -->
       </ul>
     </div>
+
+    <div class="cursor">
+      <span class="txt"></span>
+    </div>
     <script>
       $.ajax({ url: "data/portfolio.json" })
         .done(function (response) {
@@ -68,7 +79,7 @@
               categoryHtml += `<span>#${item02}</span>`;
             });
             listHtml += `<li class="item ${item.category.join(" ")}">
-                        <a href="">
+                        <a href="images/${item.img}" data-fancybox="${item.category}">
                           <div class="img"><img src="images/${item.img}" alt="" /></div>
                           <div class="info">
                             <h2>${item.title}</h2>
@@ -113,6 +124,35 @@
         .fail(function (error) {
           console.log(error);
         });
+
+      //$(".cursor")
+      $(window).on("mousemove", function (e) {
+        const mx = e.clientX;
+        const my = e.clientY;
+        gsap.to(".cursor", { left: mx, top: my, duration: 1, ease: "power4" });
+        $("#screen").val(`x:${e.screenX} / y:${e.screenY}`);
+        $("#offset").val(`x:${e.offsetX} / y:${e.offsetY}`);
+        $("#page").val(`x:${e.pageX} / y:${e.pageY}`);
+        $("#client").val(`x:${e.clientX} / y:${e.clientY}`);
+      });
+
+      // event delegate
+      $(".list ul").on("mouseenter", "li", function () {
+        $(".cursor .txt").text("click");
+        gsap.to(".cursor", { width: 100, height: 100, duration: 1, backgroundColor: "#f00", ease: "elastic" });
+      });
+      $(".list ul").on("mouseleave", "li", function () {
+        $(".cursor .txt").text("");
+        gsap.to(".cursor", { width: 20, height: 20, duration: 1, backgroundColor: "rgba(255,255,255,0.5)", ease: "power4" });
+      });
+      $(".category ul li").on("mouseenter", function () {
+        $(".cursor .txt").text("click");
+        gsap.to(".cursor", { width: 100, height: 100, duration: 1, backgroundColor: "#f00", ease: "elastic" });
+      });
+      $(".category ul li").on("mouseleave", function () {
+        $(".cursor .txt").text("");
+        gsap.to(".cursor", { width: 20, height: 20, duration: 1, backgroundColor: "rgba(255,255,255,0.5)", ease: "power4" });
+      });
     </script>
   </body>
 </html>
