@@ -25,13 +25,25 @@
     <script src="js/chart.min.js"></script>
     <script src="js/moment.min.js"></script>
     <script src="js/lightpick.js"></script>
+    <script src="js/isotope.pkgd.min.js"></script>
+    <script src="js/imagesloaded.pkgd.min.js"></script>
   </head>
   <body>
     <header id="header">
       <h1>portfolio <strong>gallery</strong></h1>
     </header>
-    <div class="list">
+
+    <div class="category">
       <ul>
+        <li class="on" data-filter="item">all</li>
+        <li data-filter="paint">paint</li>
+        <li data-filter="sketch">sketch</li>
+        <li data-filter="photo">photo</li>
+      </ul>
+    </div>
+
+    <div class="list">
+      <ul class="item-list">
         <!-- <li>
           <a href="">
             <div class="img"><img src="images/01.jpg" alt="" /></div>
@@ -51,18 +63,41 @@
           const typoList = response.typoList;
           let listHtml = "";
           $.each(typoList, function (idx, item) {
-            listHtml += `<li>
+            listHtml += `<li class="item ${item.category}">
                         <a href="">
                           <div class="img"><img src="images/${item.img}" alt="" /></div>
                           <div class="info">
                             <h2>${item.title}</h2>
                             <p class="desc">${item.desc}</p>
+                            <p class="category">#${item.category}</p>
                             <p class="point">${item.point}</p>
                           </div>
                         </a>
                       </li>`;
           });
-          $(".list ul").html(listHtml);
+          $(".list ul").html(listHtml); // tag를 만들어서 끼워 넣은 상태 이미지가 아직 완전히 로딩이 되었다는걸 보장못함
+
+          const grid = $(".item-list").isotope({
+            itemSelector: ".item",
+            layoutMode: "masonry",
+          });
+          grid.imagesLoaded().progress(function () {
+            grid.isotope("layout");
+          });
+
+          $(".category ul li").on("click", function () {
+            $(this).addClass("on").siblings().removeClass("on");
+            const filterWord = $(this).data("filter");
+            grid.isotope({ filter: `.${filterWord}` });
+          });
+
+          // const gridAll = $(".item-list").imagesLoaded(function () {
+          //   // init Isotope after all images have loaded
+          //   gridAll.isotope({
+          //     itemSelector: ".item",
+          //     layoutMode: "masonry",
+          //   });
+          // });
         })
         .fail(function (error) {
           console.log(error);
