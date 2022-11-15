@@ -63,14 +63,22 @@
           const typoList = response.typoList;
           let listHtml = "";
           $.each(typoList, function (idx, item) {
-            listHtml += `<li class="item ${item.category}">
+            let categoryHtml = "";
+            $.each(item.category, function (idx02, item02) {
+              categoryHtml += `<span>#${item02}</span>`;
+            });
+            listHtml += `<li class="item ${item.category.join(" ")}">
                         <a href="">
                           <div class="img"><img src="images/${item.img}" alt="" /></div>
                           <div class="info">
                             <h2>${item.title}</h2>
+
                             <p class="desc">${item.desc}</p>
-                            <p class="category">#${item.category}</p>
-                            <p class="point">${item.point}</p>
+                            <p class="category">${categoryHtml}</p>
+                            <div class="footer">
+                              <p class="point">${item.point}</p>
+                              <p class="author">${item.author}</p>
+                            </div>
                           </div>
                         </a>
                       </li>`;
@@ -80,6 +88,9 @@
           const grid = $(".item-list").isotope({
             itemSelector: ".item",
             layoutMode: "masonry",
+            getSortData: {
+              sortPoint: ".point",
+            },
           });
           grid.imagesLoaded().progress(function () {
             grid.isotope("layout");
@@ -88,7 +99,7 @@
           $(".category ul li").on("click", function () {
             $(this).addClass("on").siblings().removeClass("on");
             const filterWord = $(this).data("filter");
-            grid.isotope({ filter: `.${filterWord}` });
+            grid.isotope({ filter: `.${filterWord}`, sortBy: "sortPoint", sortAscending: false });
           });
 
           // const gridAll = $(".item-list").imagesLoaded(function () {
