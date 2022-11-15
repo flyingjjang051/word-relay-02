@@ -1,0 +1,37 @@
+.list {
+  ul {
+    width: 1400px;
+    margin: 100px auto;
+    display: flex;
+    flex-wrap: wrap;
+    li {
+      width: 25%;
+      padding: 10px;
+      box-sizing: border-box;
+      a {
+        display: block;
+        background-color: #fff;
+        padding: 10px;
+        img {
+          width: 100%;
+        }
+        .info {
+          h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 10px 0;
+          }
+          .desc {
+            color: #666;
+            line-height: 1.5;
+          }
+          .point {
+            color: #f00;
+            margin-top: 50px;
+            font-size: 24px;
+          }
+        }
+      }
+    }
+  }
+}
