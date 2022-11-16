@@ -12,9 +12,9 @@ body {
 #main-visual svg {
   width: 600px;
 }
-#main-visual svg #g8 path {
-  stroke-dasharray: 3000;
+#main-visual svg path {
   stroke-width: 10px;
+  stroke-dasharray: 3000;
 }
 #main-visual .title {
   position: absolute;

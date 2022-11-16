@@ -11,11 +11,9 @@ body {
   position: relative;
   svg {
     width: 600px;
-    #g8 {
-      path {
-        stroke-dasharray: 3000;
-        stroke-width: 10px;
-      }
+    path {
+      stroke-width: 10px;
+      stroke-dasharray: 3000;
     }
   }
   .title {
