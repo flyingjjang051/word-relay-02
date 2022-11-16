@@ -38,23 +38,23 @@
         <defs>
           <style>
             .cls-1 {
-              fill: #fed3ae;
+              fill: #ce772a;
             }
             .cls-2 {
-              fill: #b9e1e3;
+              fill: #ac0bd4;
             }
             .cls-3 {
-              fill: #f8edeb;
+              fill: #1465c2;
             }
             .cls-4 {
               fill: none;
-              stroke: #36364c;
+              stroke: #4c4036;
               stroke-linecap: round;
               stroke-linejoin: round;
             }
           </style>
         </defs>
-        <title>6643526</title>
+        <title>yacht</title>
         <g id="OBJECTS">
           <path
             class="cls-1"
@@ -87,7 +87,20 @@
     </div>
     <script>
       Splitting();
+
+      console.log(document.querySelector(".cls-4").getTotalLength());
+
+      console.log($(".cls-4").get(0).getTotalLength());
+
+      const lengthTotal = Math.ceil($(".cls-4").get(0).getTotalLength());
+      $(".cls-4").css({ strokeDasharray: lengthTotal, strokeDashoffset: lengthTotal });
       const svgTL = gsap.timeline();
+      svgTL
+        .to(".cls-4", { strokeDashoffset: 0, duration: 5 })
+        .to(".cls-1", { opacity: 1 })
+        .to(".cls-2", { opacity: 1 })
+        .to(".cls-3", { opacity: 1 })
+        .from(".title .char", { y: -150, opacity: 0, duration: 1.5, stagger: { each: 0.1 }, ease: "bounce" });
     </script>
   </body>
 </html>
