@@ -1,0 +1,36 @@
+@import "mixins";
+
+body {
+  background-color: rgb(245, 173, 173);
+}
+#main-visual {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  svg {
+    width: 600px;
+    path {
+      stroke-width: 2px;
+    }
+  }
+  .title {
+    width: 100%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    font-size: clamp(48px, 8vw, 180px);
+    font-weight: 700;
+  }
+}
+@keyframes svg-ani {
+  0% {
+    stroke-dashoffset: 4890;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
