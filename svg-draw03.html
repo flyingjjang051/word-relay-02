@@ -132,6 +132,27 @@
     </div>
     <script>
       Splitting();
+      //console.log($(".cls-4").get(0).getTotalLength());
+      //$(".cls-4").css({ strokeDasharray: 4000, strokeDashoffset: 4000 });
+      $(".cls-4").each(function (idx, item) {
+        const totalLength = Math.ceil(item.getTotalLength());
+        $(item).css({ strokeDasharray: totalLength, strokeDashoffset: totalLength });
+      });
+      const svgTL = gsap.timeline();
+      svgTL
+        .to(".cls-4", {
+          strokeDashoffset: 0,
+          duration: function (idx, item) {
+            console.log($(item).css("strokeDasharray"));
+            //console.log(item.style.strokeDasharray);
+            return Math.max(parseInt($(item).css("strokeDasharray")) / 1000, 0.5);
+          },
+          stagger: { each: 0.5 },
+        })
+        .from(".cls-1", { opacity: 0 })
+        .from(".cls-2", { opacity: 0 })
+        .from(".cls-3", { opacity: 0 })
+        .from(".title .char", { opacity: 0, y: -150, stagger: { each: 0.1 } });
     </script>
   </body>
 </html>
