@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>corona</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet" />
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/fancybox.css" />
+    <link rel="stylesheet" href="css/lightpick.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/splitting.css" />
+    <link rel="stylesheet" href="css/svg03.css" />
+    <script src="https://kit.fontawesome.com/08ebc00fc6.js" crossorigin="anonymous"></script>
+    <script src="js/gsap/gsap.min.js"></script>
+    <script src="js/gsap/ScrollToPlugin.min.js"></script>
+    <script src="js/splitting.min.js"></script>
+    <script src="js/aos.js"></script>
+    <script src="js/hangul-tools.js"></script>
+    <script src="js/fancybox.umd.js"></script>
+    <script src="js/jquery-3.6.1.min.js"></script>
+    <script src="js/chart.min.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script src="js/lightpick.js"></script>
+    <script src="js/isotope.pkgd.min.js"></script>
+    <script src="js/imagesloaded.pkgd.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  </head>
+  <body>
+    <header id="header">
+      <h1>svg <strong>draw</strong></h1>
+    </header>
+    <div>
+      <input type="text" id="user-name" />
+      <input type="text" id="user-phone" />
+      <input type="text" id="user-email" />
+      <input type="text" id="message" />
+    </div>
+    <button id="btn-mail">send</button>
+    <script>
+      const sendEmail = () => {
+        emailjs.init("6pIne_0rOWK-gwTBm");
+        let templateParams = {
+          name: document.getElementById("user-name").value,
+          phone: document.getElementById("user-phone").value,
+          email: document.getElementById("user-email").value,
+          message: document.getElementById("message").value,
+        };
+        console.log(templateParams);
+        emailjs.send("service_q85gi3s", "template_uj75qdo", templateParams).then(
+          function (response) {
+            console.log("Success!", response.status, response.text);
+            //setStatus("success");
+          },
+          function (error) {
+            console.log("Failed...", error);
+            //setStatus("fail");
+          }
+        );
+      };
+      $("#btn-mail").on("click", function () {
+        sendEmail();
+      });
+    </script>
+  </body>
+</html>

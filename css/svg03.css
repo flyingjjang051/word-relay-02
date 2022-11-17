@@ -1,5 +1,5 @@
 body {
-  background-color: rgb(245, 173, 173);
+  background-color: rgb(238, 206, 206);
 }
 
 #main-visual {
@@ -24,6 +24,16 @@ body {
   transform: translate(-50%, -50%);
   font-size: clamp(48px, 8vw, 180px);
   font-weight: 700;
+  font-family: "Fredoka";
+  text-transform: uppercase;
+}
+#main-visual .title .char {
+  color: transparent;
+  background-image: url("../images/pattern.png");
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.1);
 }
 
 @keyframes svg-ani {

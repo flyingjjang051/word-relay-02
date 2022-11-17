@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet" />
     <link rel="stylesheet" href="css/reset.css" />
     <link rel="stylesheet" href="css/fancybox.css" />
@@ -138,14 +139,14 @@
         const totalLength = Math.ceil(item.getTotalLength());
         $(item).css({ strokeDasharray: totalLength, strokeDashoffset: totalLength });
       });
-      const svgTL = gsap.timeline();
+      const svgTL = gsap.timeline({});
       svgTL
         .to(".cls-4", {
           strokeDashoffset: 0,
           duration: function (idx, item) {
             console.log($(item).css("strokeDasharray"));
             //console.log(item.style.strokeDasharray);
-            return Math.max(parseInt($(item).css("strokeDasharray")) / 1000, 0.5);
+            return Math.max(parseInt($(item).css("strokeDasharray")) / 500, 0.5);
           },
           stagger: { each: 0.5 },
         })
